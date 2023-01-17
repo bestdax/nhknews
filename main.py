@@ -42,6 +42,7 @@ class NHKNews:
     def print_list(ls: list):
         for n, item in enumerate(ls):
             print(n + 1, ls[n])
+        print('\n' + '-' * 79 + '\n')
 
     def print_titles(self):
         self.print_list(self.titles)
@@ -51,12 +52,24 @@ class NHKNews:
         with open(path, 'wb') as f:
             f.write(data)
 
-    def download(self, news_number: int) -> None:
+    def download_single_url(self, news_number: int) -> None:
         res = requests.get(self.urls[int(news_number)], headers=HEADERS)
         if res.status_code == 200:
             self.write(self.titles[news_number], res.content)
             print(f'News titled {self.titles[int(news_number)]} downloaded successfully.')
             print('-' * 79)
+
+    def download(self, command):
+        if command.isdigit():
+            self.download_single_url(int(command) - 1)
+        if command.lower() == 'q':
+            return
+        if command.lower() == 'all':
+            [self.download_single_url(number) for number in range(len(self.titles))]
+        if m := re.match('\s*(\d+)\s*-\s*(\d+)\s*', command):
+            # download a range
+            # TODO check range invalidation
+            [self.download_single_url(number) for number in range(int(m.group(1)) - 1, int(m.group(2)))]
 
     def print_download_menu(self):
         menu = [f'Input a number range from 1 to {len(self.urls)}',
@@ -65,24 +78,34 @@ class NHKNews:
                 'Input "q" to quit']
         self.print_list(menu)
 
-    # TODO Print Command Menu
+    def print_commands_list(self):
+        menu = ['List news',
+                'Refresh News List',
+                'Download']
+        self.print_list(menu)
+
+    def run(self):
+        while True:
+            self.print_commands_list()
+            command = input('Enter command number(q to quit): ')
+            if command == '1':
+                self.print_titles()
+            elif command == '2':
+                self.refresh()
+            elif command == '3':
+                self.print_download_menu()
+                download_command = input('Enter a download command: ')
+                self.download(download_command)
+            elif command.lower() == 'q':
+                print('See you tomorrow!!!')
+                return
+            else:
+                print("Command is not defined, try again!")
 
 
 def main():
     nhknews = NHKNews()
-    while True:
-        nhknews.print_titles()
-        nhknews.print_download_menu()
-        user_input = input()
-        if user_input.isdigit():
-            nhknews.download(int(user_input) - 1)
-        if user_input.lower() == 'q':
-            return
-        if user_input.lower() == 'all':
-            [nhknews.download(number) for number in range(len(nhknews.titles))]
-        if m := re.match('\s*(\d+)\s*-\s*(\d+)\s*', user_input):
-            # TODO check range invalidation
-            [nhknews.download(number) for number in range(int(m.group(1)) - 1, int(m.group(2)))]
+    nhknews.run()
 
 
 if __name__ == '__main__':

@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import sys
+from timestamp import gen_ass_timestamp
+
 
 URL = 'https://www.nhk.or.jp/s-media/news/podcast/list/v1/all.xml'
 HEADERS = {
@@ -81,8 +83,15 @@ class NHKNews:
     def print_commands_list(self):
         menu = ['List news',
                 'Refresh News List',
-                'Download']
+                'Download',
+                'Gen Subtitles']
         self.print_list(menu)
+
+    def gen_subtitles(self):
+        os.chdir(self.DOWNLOADDIR)
+        for file in os.listdir():
+            if file.endswith('.mp3') and 'NHKニュース' in file:
+                gen_ass_timestamp(file)
 
     def run(self):
         while True:
@@ -96,6 +105,8 @@ class NHKNews:
                 self.print_download_menu()
                 download_command = input('Enter a download command: ')
                 self.download(download_command)
+            elif command == '4':
+                self.gen_subtitles()
             elif command.lower() == 'q':
                 print('See you tomorrow!!!')
                 return

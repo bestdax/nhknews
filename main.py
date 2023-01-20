@@ -66,7 +66,7 @@ class NHKNews:
             return
         if command.lower() == 'all':
             [self.download_single_url(number) for number in range(len(self.titles))]
-        if m := re.match('\s*(\d+)\s*-\s*(\d+)\s*', command):
+        if m := re.match(r'\s*(\d+)\s*-\s*(\d+)\s*', command):
             # download a range
             # TODO check range invalidation
             [self.download_single_url(number) for number in range(int(m.group(1)) - 1, int(m.group(2)))]

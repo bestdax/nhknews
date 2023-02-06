@@ -89,7 +89,7 @@ class NHKNews:
     def gen_subtitles(self):
         os.chdir(self.DOWNLOADDIR)
         for file in os.listdir():
-            if file.endswith('.mp3') and 'NHKニュース' in file:
+            if file.endswith('.mp3') and 'ニュース' in file:
                 gen_ass_timestamp(file)
 
     def run(self):
@@ -100,10 +100,12 @@ class NHKNews:
                 self.print_titles()
             elif command == '2':
                 self.refresh()
+                self.print_titles()
             elif command == '3':
                 self.print_download_menu()
                 download_command = input('Enter a download command: ')
                 self.download(download_command)
+                self.gen_subtitles()
             elif command == '4':
                 self.gen_subtitles()
             elif command.lower() == 'q':

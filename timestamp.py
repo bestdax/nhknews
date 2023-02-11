@@ -14,8 +14,8 @@ def gen_ass_timestamp(file):
            "[Events]\n"
            "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     for stamp in stamps:
-        start = datetime.utcfromtimestamp(stamp[0] / 1000)
-        end = datetime.utcfromtimestamp(stamp[1] / 1000)
+        start = datetime.utcfromtimestamp(stamp[0] / 1000 - 0.05)
+        end = datetime.utcfromtimestamp(stamp[1] / 1000 + 0.05)
         ass += f'Dialogue: 0,{start.strftime("%H:%M:%S.%f")},{end.strftime("%H:%M:%S.%f")},Default,,0,0,0,,\n'
 
     with open(f'{file.split(".")[0] + ".ass"}', 'w') as f:

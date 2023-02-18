@@ -9,7 +9,7 @@ def gen_ass_timestamp(f):
     ass = ("\n"
            "[V4+ Styles]\n"
            "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
-           "Style: Default,Arial,20,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,2,2,10,10,10,1\n"
+           "Style: Default,PingFang SC,20,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,2,2,10,10,10,1\n"
            "\n"
            "[Events]\n"
            "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
@@ -18,7 +18,9 @@ def gen_ass_timestamp(f):
         end = datetime.utcfromtimestamp(stamp[1] / 1000 + 0.05)
         ass += f'Dialogue: 0,{start.strftime("%H:%M:%S.%f")},{end.strftime("%H:%M:%S.%f")},Default,,0,0,0,,\n'
 
-    with open(f'{f.split(".")[0] + ".ass"}', 'w') as f:
+    ass += "Dialogue: 0,0:04:57.52,0:05:03.00,Default,,0,0,0,,{\fscx192\fscy177\pos(604.308,435.538)}  看到这里的小伙伴动动你的小手点个赞吧 "
+
+    with open(f'{file.split(".")[0] + ".ass"}', 'w') as f:
         f.write(ass)
 
 

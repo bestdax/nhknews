@@ -3,8 +3,8 @@ from pydub.silence import detect_nonsilent
 from datetime import datetime
 
 
-def gen_ass_timestamp(file):
-    audio = AudioSegment.from_file(file)
+def gen_ass_timestamp(f):
+    audio = AudioSegment.from_file(f)
     stamps = detect_nonsilent(audio, silence_thresh=-46, min_silence_len=200)
     ass = ("\n"
            "[V4+ Styles]\n"
@@ -18,7 +18,7 @@ def gen_ass_timestamp(file):
         end = datetime.utcfromtimestamp(stamp[1] / 1000 + 0.05)
         ass += f'Dialogue: 0,{start.strftime("%H:%M:%S.%f")},{end.strftime("%H:%M:%S.%f")},Default,,0,0,0,,\n'
 
-    with open(f'{file.split(".")[0] + ".ass"}', 'w') as f:
+    with open(f'{f.split(".")[0] + ".ass"}', 'w') as f:
         f.write(ass)
 
 
